@@ -1,5 +1,8 @@
 package com.example.trumancranor.flixster.models;
 
+import android.content.Context;
+import android.content.res.Configuration;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,6 +20,18 @@ public class Movie {
         return String.format("https://image.tmdb.org/t/p/w342%s", posterPathSuffix);
     }
 
+    public String getBackdropPath() {
+        return String.format("https://image.tmdb.org/t/p/w780%s", backdropPathSuffix);
+    }
+
+    public String getResponsiveImagePath(Context context) {
+        if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            return getPosterPath();
+        } else {
+            return getBackdropPath();
+        }
+    }
+
     public String getOriginalTitle() {
         return originalTitle;
     }
@@ -26,11 +41,13 @@ public class Movie {
     }
 
     private String posterPathSuffix;
+    private String backdropPathSuffix;
     private String originalTitle;
     private String overview;
 
     public Movie(JSONObject jsonObject) throws JSONException {
         this.posterPathSuffix = jsonObject.getString("poster_path");
+        this.backdropPathSuffix = jsonObject.getString("backdrop_path");
         this.originalTitle = jsonObject.getString("original_title");
         this.overview = jsonObject.getString("overview");
     }
