@@ -1,5 +1,6 @@
 package com.example.trumancranor.flixster;
 
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ListView;
@@ -22,18 +23,36 @@ public class MovieStreamActivity extends AppCompatActivity {
     ArrayList<Movie> movies;
     MovieArrayAdapter movieAdapter;
     ListView lvItems;
+    SwipeRefreshLayout swipeContainer;
+
+    private static final String url = "https://api.themoviedb.org/3/movie/now_playing?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_stream);
 
-        lvItems = (ListView) findViewById(R.id.lvMovieStream);
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        lvItems = (ListView) swipeContainer.findViewById(R.id.lvMovieStream);
         movies = new ArrayList<Movie>();
         movieAdapter = new MovieArrayAdapter(this, movies);
         lvItems.setAdapter(movieAdapter);
 
-        String url = "https://api.themoviedb.org/3/movie/now_playing?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed";
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                asyncLoadData();
+            }
+        });
+
+        asyncLoadData();
+    }
+
+
+    private void asyncLoadData() {
+        /* Add the 'refresh' animation, even if we're loading data for app-start */
+        swipeContainer.setRefreshing(true);
+
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(url, new JsonHttpResponseHandler(){
             @Override
@@ -46,11 +65,13 @@ public class MovieStreamActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                swipeContainer.setRefreshing(false);
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 super.onFailure(statusCode, headers, responseString, throwable);
+                swipeContainer.setRefreshing(false);
             }
         });
     }

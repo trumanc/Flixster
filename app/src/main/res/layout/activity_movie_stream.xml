@@ -11,12 +11,15 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.trumancranor.flixster.MovieStreamActivity">
 
-    <ListView
-        android:id="@+id/lvMovieStream"
+    <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"/>
+        android:id="@+id/swipeContainer">
+
+        <ListView
+            android:id="@+id/lvMovieStream"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>
