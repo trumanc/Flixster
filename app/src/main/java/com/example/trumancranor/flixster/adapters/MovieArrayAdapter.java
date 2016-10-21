@@ -54,7 +54,7 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
         viewHolder.overview.setText(movie.getOverview());
         viewHolder.image.setImageResource(0);
         Picasso.with(getContext())
-                .load(movie.getResponsiveImagePath(getContext()))
+                .load(movie.getStreamPageImagePath(getContext()))
                 .placeholder(R.drawable.clapboard)
                 .into(viewHolder.image);
 

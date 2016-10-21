@@ -1,10 +1,15 @@
-package com.example.trumancranor.flixster;
+package com.example.trumancranor.flixster.activities;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.example.trumancranor.flixster.R;
 import com.example.trumancranor.flixster.adapters.MovieArrayAdapter;
 import com.example.trumancranor.flixster.models.Movie;
 
@@ -37,6 +42,17 @@ public class MovieStreamActivity extends AppCompatActivity {
         movies = new ArrayList<Movie>();
         movieAdapter = new MovieArrayAdapter(this, movies);
         lvItems.setAdapter(movieAdapter);
+
+        //Capture this context for use in the OnItemClickListener
+        final Context parentContext = this;
+
+        lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = MovieDetailActivity.intentForMovie(parentContext, movies.get(position));
+                startActivity(intent);
+            }
+        });
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
