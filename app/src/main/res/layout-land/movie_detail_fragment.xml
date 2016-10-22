@@ -3,13 +3,26 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-    <ImageView
-        android:id="@+id/ivImage"
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:adjustViewBounds="true"
-        android:onClick="imageClicked"
-        />
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/ivImage"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:onClick="imageClicked"
+            />
+
+        <ImageView
+            android:id="@+id/playButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:src="@drawable/play_icon"/>
+
+    </RelativeLayout>
 
 
     <ScrollView

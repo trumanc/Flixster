@@ -20,17 +20,17 @@ The following **optional** features are implemented:
 
 * [X] Improved the user interface through styling and coloring.
 * [X] Allow user to view details of the movie including ratings and popularity within a separate activity or dialog fragment.
-* [ ] When viewing a popular movie (i.e. a movie voted for more than 5 stars) the video should show the full backdrop image as the layout.  Uses [Heterogenous ListViews](http://guides.codepath.com/android/Implementing-a-Heterogenous-ListView) or [Heterogenous RecyclerView](http://guides.codepath.com/android/Heterogenous-Layouts-inside-RecyclerView) to show different layouts.
+* [X] When viewing a popular movie (i.e. a movie voted for more than 5 stars) the video should show the full backdrop image as the layout.  Uses [Heterogenous ListViews](http://guides.codepath.com/android/Implementing-a-Heterogenous-ListView) or [Heterogenous RecyclerView](http://guides.codepath.com/android/Heterogenous-Layouts-inside-RecyclerView) to show different layouts.
 
 The following **stretch** features are implemented:
 
-* [ ] Allow video trailers to be played in full-screen using the YouTubePlayerView.
-    * [ ] Overlay a play icon for videos that can be played.
-    * [ ] More popular movies should start a separate activity that plays the video immediately.
-    * [ ] Less popular videos rely on the detail page should show ratings and a YouTube preview.
+* [X] Allow video trailers to be played in full-screen using the YouTubePlayerView.
+    * [X] Overlay a play icon for videos that can be played.
+    * [X] More popular movies should start a separate activity that plays the video immediately.
+    * [X] Less popular videos rely on the detail page should show ratings and a YouTube preview.
 * [ ] Leverages the [data binding support module](http://guides.codepath.com/android/Applying-Data-Binding-for-Views) to bind data into layout templates.
-* [ ] Uses [retrolambda expressions](http://guides.codepath.com/android/Lambda-Expressions) to cleanup event handling blocks.
-* [ ] Apply the popular [Butterknife annotation library](http://guides.codepath.com/android/Reducing-View-Boilerplate-with-Butterknife) to reduce boilerplate code.
+* [X] Uses [retrolambda expressions](http://guides.codepath.com/android/Lambda-Expressions) to cleanup event handling blocks.
+* [X] Apply the popular [Butterknife annotation library](http://guides.codepath.com/android/Reducing-View-Boilerplate-with-Butterknife) to reduce boilerplate code.
 * [ ] Apply rounded corners for the poster or background images using [Picasso transformations](https://guides.codepath.com/android/Displaying-Images-with-the-Picasso-Library#other-transformations)
 
 The following **additional** features are implemented:
@@ -41,13 +41,21 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://g.recordit.co/JjaGJQd0xz.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='http://g.recordit.co/MLpqKuH6Dy.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [RecordIt](http://recordit.co/).
 
 ## Notes
 
-Describe any challenges encountered while building the app.
+I attempted to use retrolambda expressions in another place (specifically the handler for the async http request)
+but ran into some limitations of the approach. First, it's unable to syntactically use a lambda if you need to pass
+another argument into the function. Second, I fail to see the usefulness of these retrolambda expressions. They have
+a marginally useful effect of reducing some of the verbosity of java, but at the expense of actively hiding useful names
+and data types that document what the hell it is the code is doing. If I wanted to hide all the information I'd be using
+python.
+
+I had trouble installing youtube onto my emulator, so I had to test the youtube functionality on my physical phone.
+I got it to work, but I couldn't record a screencast of it =(
 
 ## Open-source libraries used
 

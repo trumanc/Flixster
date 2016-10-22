@@ -8,11 +8,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.example.trumancranor.flixster.BuildConfig;
 import com.example.trumancranor.flixster.R;
 import com.example.trumancranor.flixster.adapters.MovieArrayAdapter;
 import com.example.trumancranor.flixster.models.Movie;
 
+import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -22,13 +25,18 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnItemClick;
 import cz.msebera.android.httpclient.Header;
+
+import static com.example.trumancranor.flixster.R.id.swipeContainer;
 
 public class MovieStreamActivity extends AppCompatActivity {
     ArrayList<Movie> movies;
     MovieArrayAdapter movieAdapter;
-    ListView lvItems;
-    SwipeRefreshLayout swipeContainer;
+    @BindView(R.id.lvMovieStream) ListView lvItems;
+    @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
 
     private static final String url = "https://api.themoviedb.org/3/movie/now_playing?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed";
 
@@ -37,8 +45,8 @@ public class MovieStreamActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_stream);
 
-        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
-        lvItems = (ListView) swipeContainer.findViewById(R.id.lvMovieStream);
+        ButterKnife.bind(this);
+
         movies = new ArrayList<Movie>();
         movieAdapter = new MovieArrayAdapter(this, movies);
         lvItems.setAdapter(movieAdapter);
@@ -46,24 +54,23 @@ public class MovieStreamActivity extends AppCompatActivity {
         //Capture this context for use in the OnItemClickListener
         final Context parentContext = this;
 
-        lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = MovieDetailActivity.intentForMovie(parentContext, movies.get(position));
-                startActivity(intent);
-            }
-        });
-
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                asyncLoadData();
-            }
-        });
+        swipeContainer.setOnRefreshListener(() -> asyncLoadData());
 
         asyncLoadData();
     }
 
+    @OnItemClick(R.id.lvMovieStream)
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Movie movie = movies.get(position);
+
+        if (movie.isPopular()) {
+            Intent youtubeIntent = YoutubeVideoActivity.intentForVideo(this, movie.getTrailerKey());
+            startActivity(youtubeIntent);
+        } else {
+            Intent intent = MovieDetailActivity.intentForMovie(this, movies.get(position));
+            startActivity(intent);
+        }
+    }
 
     private void asyncLoadData() {
         /* Add the 'refresh' animation, even if we're loading data for app-start */

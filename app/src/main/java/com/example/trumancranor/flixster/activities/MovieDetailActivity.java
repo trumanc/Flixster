@@ -20,34 +20,46 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 
 public class MovieDetailActivity extends AppCompatActivity {
 
     private static final String ARG_MOVIE = "movie";
+    Movie movie;
+    @BindView(R.id.tvOverview) TextView overview;
+    @BindView(R.id.ratingBar) RatingBar ratingBar;
+    @BindView(R.id.ivImage) ImageView image;
+    @BindView(R.id.tvTagline) TextView tagline;
+    @BindView(R.id.playButton) ImageView playButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.movie_detail_fragment);
+        ButterKnife.bind(this);
 
         Intent intent = getIntent();
         Movie movie = (Movie) intent.getSerializableExtra(ARG_MOVIE);
 
+        this.movie = movie;
+
         setTitle(movie.getOriginalTitle() + " (" + movie.getReleaseDate().substring(0, 4) + ")");
-        TextView overview = (TextView) findViewById(R.id.tvOverview);
         overview.setText(movie.getOverview());
 
-        RatingBar ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+        if (movie.getTrailerKey() == null) {
+            playButton.setVisibility(View.INVISIBLE);
+        }
+
         ratingBar.setNumStars(10);
         ratingBar.setStepSize(0.5f);
         ratingBar.setRating((float) movie.getStars());
 
-        ImageView poster = (ImageView) findViewById(R.id.ivImage);
         Picasso.with(this)
                 .load(movie.getDetailPageImagePath(this))
                 .placeholder(R.drawable.clapboard)
-                .into(poster);
+                .into(image);
         loadExtraDetailsAsync(movie);
     }
 
@@ -58,7 +70,6 @@ public class MovieDetailActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
-                    TextView tagline = (TextView) findViewById(R.id.tvTagline);
                     tagline.setText(response.getString("tagline"));
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -88,6 +99,11 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     public void imageClicked(View image) {
-        Toast.makeText(this, "Clicked the image", Toast.LENGTH_SHORT).show();
+        if (movie.getTrailerKey() != null) {
+            Intent youtubeIntent = YoutubeVideoActivity.intentForVideo(this, movie.getTrailerKey());
+            startActivity(youtubeIntent);
+        } else {
+            Toast.makeText(this, "No youtube trailer for this movie", Toast.LENGTH_SHORT).show();
+        }
     }
 }

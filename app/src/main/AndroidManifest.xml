@@ -22,6 +22,9 @@
             android:name=".activities.MovieDetailActivity"
             android:theme="@style/Base.Theme.AppCompat">
         </activity>
+        <activity android:name=".activities.YoutubeVideoActivity"
+                  android:theme="@style/Base.Theme.AppCompat">
+        </activity>
     </application>
 
 </manifest>

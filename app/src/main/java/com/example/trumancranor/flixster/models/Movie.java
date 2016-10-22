@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 public class Movie implements Serializable {
 
+    private static final double POPULARITY_THRESHOLD = 10.0;
 
     public String getPosterPath() {
         return String.format("https://image.tmdb.org/t/p/w342%s", posterPathSuffix);
@@ -23,6 +24,10 @@ public class Movie implements Serializable {
     }
 
     public String getStreamPageImagePath(Context context) {
+        if (isPopular()) {
+            return getBackdropPath();
+        }
+
         if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT
                 || backdropPathSuffix == null || backdropPathSuffix.isEmpty()) {
             return getPosterPath();
@@ -37,6 +42,11 @@ public class Movie implements Serializable {
         } else {
             return getPosterPath();
         }
+    }
+
+    public boolean isPopular() {
+        /* Impose a restriction that we will only consider a movie popular if it also has a backdrop image */
+        return popularity >= POPULARITY_THRESHOLD && backdropPathSuffix != null && !backdropPathSuffix.isEmpty();
     }
 
     public String getOriginalTitle() {
@@ -56,8 +66,19 @@ public class Movie implements Serializable {
     private String backdropPathSuffix;
     private String originalTitle;
     private String overview;
+
+    public String getTrailerKey() {
+        return trailerKey;
+    }
+
+    public void setTrailerKey(String trailerKey) {
+        this.trailerKey = trailerKey;
+    }
+
+    private String trailerKey;
     private int id;
     private double rating;
+    private double popularity;
 
     public String getReleaseDate() {
         return releaseDate;
@@ -73,6 +94,7 @@ public class Movie implements Serializable {
         this.releaseDate = jsonObject.getString("release_date");
         this.id = jsonObject.getInt("id");
         this.rating = jsonObject.getDouble("vote_average");
+        this.popularity = jsonObject.getDouble("popularity");
     }
 
     public double getStars() {

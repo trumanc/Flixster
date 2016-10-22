@@ -14,16 +14,30 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/ivImage"
+            <RelativeLayout
+                android:id="@+id/imageLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentRight="true"
-                android:adjustViewBounds="true"
-                android:onClick="imageClicked"
-                />
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/ivImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:adjustViewBounds="true"
+                    android:onClick="imageClicked"
+                    />
+
+
+                <ImageView
+                    android:id="@+id/playButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/play_icon"/>
+
+            </RelativeLayout>
 
 
             <RatingBar
@@ -31,7 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/Base.Widget.AppCompat.RatingBar.Indicator"
-                android:layout_below="@+id/ivImage"/>
+                android:layout_below="@id/imageLayout"/>
 
             <TextView
                 android:id="@+id/tvTagline"
